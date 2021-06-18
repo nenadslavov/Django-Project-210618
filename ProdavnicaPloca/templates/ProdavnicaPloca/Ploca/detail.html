@@ -1,0 +1,23 @@
+{% extends "ProdavnicaPloca/base.html" %} {% load static %} {% block title %} {{
+ploca.album }} {% endblock %} {% block content %}
+<div class="product-detail">
+  <img
+    src="{% if ploca.slika %}{{ ploca.slika.url }} {% else %} {% static 'img/no_image.png' %}{% endif %}"
+  />
+  <h1>{{ ploca.album }}</h1>
+  <h2>
+    <a href="{{ ploca.kategorija.ApsolutniURL }}"> {{ ploca.kategorija }} </a>
+  </h2>
+  <p class="price">&euro;{{ ploca.cena }}</p>
+  <!-- ovde ce biti za korpu-->
+  {{ ploca.pesma|linebreaks }}
+
+  <form action="{% url 'KorpaZaKupovinu:DodajUKorpu' ploca.id %}" method="post">
+    {{ formazadodavanjeploceukorpu }} {% csrf_token %}
+    <input type="submit" value="Dodaj u korpu" />
+  </form>
+  {{ ploca.opis|linebreaks }}
+  <p id="demo">{% url "KorpaZaKupovinu:DodajUKorpu" ploca.id %}</p>
+</div>
+
+{% endblock %}

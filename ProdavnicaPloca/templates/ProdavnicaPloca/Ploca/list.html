@@ -1,0 +1,32 @@
+{% extends "ProdavnicaPloca/base.html" %}
+{% load static %}
+{% block title %} {% if kategorija %}{{ kategorija.naziv }}{% else %}ploce{% endif %}
+{% endblock %}
+{% block content %}
+<div id="sidebar">
+    <h3>Kategorije</h3>
+    <ul>
+        <li {% if not kategorija %}class="selected" {% endif %}>
+            <a href="{% url 'ProdavnicaPloca:ListaPloca' %}">All</a>
+        </li>
+        {% for c in kategorije %}
+        <li {% if kategorija.slug == c.slug %}class="selected" {% endif %}>
+            <a href="{{ c.ApsolutniURL }}">{{ c.naziv }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+<div id="main" class="product-list">
+    <h1>{% if kategorija %}{{ kategorija.naziv }}{% else %}Ploce{% endif %}</h1>
+    {% for ploca in ploce %}
+    <div class="item">
+        <a href="{{ ploca.ApsolutniURL }}">
+            <img src="{% if ploca.slika %}{{ ploca.slika.url }}
+{% else %}{% static 'img/no_image.png' %}{% endif %}"></a>
+        <a href="{{ ploca.ApsolutniURL }}">{{ ploca.album }}</a>
+        <br>
+        RSD:{{ ploca.cena }}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

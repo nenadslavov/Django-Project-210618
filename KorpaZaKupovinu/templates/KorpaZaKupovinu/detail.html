@@ -1,0 +1,62 @@
+{% extends "ProdavnicaPloca/base.html" %}
+{% load static %}
+{% block title %} Korpa za kupovinu {% endblock %}
+{% block content %}
+<h1>Korpa za kupovinu</h1>
+<table class="cart">
+    <thead>
+        <tr>
+            <th>Slika</th>
+            <th>Ploca</th>
+            <th>Kolicina</th>
+            <th>Ukloni iz korpe</th>
+            <th>Cena po komadu</th>
+            <th>Cena</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for stavka in korpa %}
+        {% with ploca=stavka.automobil %}
+        <tr>
+            <td>
+                <a href="{{ ploca.ApsolutniURL }}">
+                    <img src="{% if ploca.slika %}{{ ploca.slika.url }}
+{% else %}{% static " img\\no_image.png" %}{% endif %}">
+                </a>
+                33
+                Korpa za kupovinu
+            </td>
+            <td>{{ ploca.album }}</td>
+            <td>
+                <form action="{% url " KorpaZaKupovinu:DodajUKorpu" ploca.id %}" method="post">
+                    {{ stavka.formazaazuriranjekolicine.kolicina }}
+                    {{ stavka.formazaazuriranjekolicine.dodati_na_kolicinu }}
+                    <input type="submit" value="Azuriraj">
+                    {% csrf_token %}
+                </form>
+            </td>
+            <td>
+                <form action="{% url " KorpaZaKupovinu:UkloniIzKorpe" ploca.id %}" method="post">
+                    <input type="submit" value="Ukloni">
+                    {% csrf_token %}
+                </form>
+            </td>
+            <td class="num">${{ stavka.cena }}</td>
+            <td class="num">${{ stavka.ukupna_cena }}</td>
+        </tr>
+        {% endwith %}
+        {% endfor %}
+        34
+        <tr class="total">
+            <td>Total</td>
+            <td colspan="4"></td>
+            <td class="num">${{ korpa.UzmiUkupnuCenu }}</td>
+        </tr>
+    </tbody>
+</table>
+<p class="text-right">
+    <a href="{% url " ProdavnicaPloca:ListaPloca" %}" class="button
+light">Nastavak kupovine</a>
+    <!-- ovde ce se kasnije dodati link za proveru porudzbine -->
+</p>
+{% endblock %}
